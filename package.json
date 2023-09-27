@@ -1,0 +1,15 @@
+{
+  "name": "webserver",
+  "version": "1.0.0",
+  "description": "Express+netlify",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "account0123",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
