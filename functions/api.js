@@ -14,7 +14,7 @@ router.get('/', (req, res) => res.send('Status: 200'));
 router.get('/anime/:id/likes', async (req, res)=>{
 	const { likes, error } = await supabase.from('anime').select('likes').eq('id', req.params.id).maybeSingle();
 	if(error) res.status(404).json({error: error});
-	else res.json({likes});
+	else res.json({likes: likes});
 });
 router.post('/anime/:id/likes', async (req, res)=>{
 	const id = req.params.id;
@@ -22,7 +22,7 @@ router.post('/anime/:id/likes', async (req, res)=>{
 	if(getError) res.status(404).json({error: getError});
 	const { updateError } = await supabase.from('anime').update({ likes: ++likes}).eq('id', id);
 	if(updateError) res.status(404).json({error: updateError});
-	else res.json({likes});
+	else res.json({likes: likes});
 });
 api.use('/api/', router);
 
