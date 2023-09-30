@@ -26,4 +26,4 @@ router.post('/anime/:id/likes', async (req, res)=>{
 });
 api.use('/api/', router);
 
-export const handler = serverless(api);
+exports.handler = serverless(api);
