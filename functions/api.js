@@ -13,12 +13,14 @@ const router = express.Router();
 router.get('/', (req, res) => res.send('Status: 200'));
 router.get('/anime/:id/likes', async (req, res)=>{
 	const { likes, error } = await supabase.from('anime').select('likes').eq('id', req.params.id).maybeSingle();
+	console.info(likes);
 	if(error) res.status(404).json({error: error});
 	else res.json({likes: likes});
 });
 router.post('/anime/:id/likes', async (req, res)=>{
 	const id = req.params.id;
-	const { likes, getError } = await supabase.from('anime').select('likes').eq('id', id).maybeSingle();
+	let { likes, getError } = await supabase.from('anime').select('likes').eq('id', id).maybeSingle();
+	console.info(likes);
 	if(getError) res.status(404).json({error: getError});
 	const { updateError } = await supabase.from('anime').update({ likes: ++likes}).eq('id', id);
 	if(updateError) res.status(404).json({error: updateError});
