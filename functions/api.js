@@ -13,7 +13,7 @@ const api = express();
 const router = express.Router();
 router.get('/', (req, res) => res.send('Status: 200'));
 router.get('/anime/:id/likes', async (req, res)=>{
-	const { data: anime, error } = await supabase.from('anime').select('*');
+	const { data: anime, error } = await supabase.from('anime').select();
 	console.info(anime);
 	if(error) res.status(404).json({error: error});
 	else res.json(anime);
