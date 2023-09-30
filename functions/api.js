@@ -1,15 +1,15 @@
-import express, { Router } from 'express';
-import serverless from 'serverless-http';
+const express = require('express');
+const serverless = require('serverless-http');
 const {
     DATABASE_URL,
     SUPABASE_KEY
 } = process.env;
-import { createClient } from '@supabase/supabase-js';
+const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(DATABASE_URL, SUPABASE_KEY);
 
 const api = express();
 
-const router = Router();
+const router = express.Router();
 router.get('/', (req, res) => res.send('Status: 200'));
 router.get('/anime/:id/likes', async (req, res)=>{
 	const { likes, error } = await supabase.from('anime').select('likes').eq('id', req.params.id).maybeSingle();
