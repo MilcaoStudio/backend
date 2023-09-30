@@ -13,22 +13,20 @@ const api = express();
 const router = express.Router();
 router.get('/', (req, res) => res.send('Status: 200'));
 router.get('/anime/:id/likes', async (req, res)=>{
-	const { likes, error } = await supabase.from('anime').eq('id', req.params.id).select('likes').maybeSingle();
-	const totalLikes = await supabase.from('anime').select('likes');
-	console.info('Total likes', totalLikes);
-	console.info(likes);
+	const { data: anime, error } = await supabase.from('anime').select('id','likes').eq('id',req.params.id).maybeSingle();
+	console.info(anime);
 	if(error) res.status(404).json({error: error});
-	else res.json({likes: likes});
+	else res.json(anime);
 });
 router.post('/anime/:id/likes', async (req, res)=>{
 	const id = req.params.id;
 	console.info('params', req.params);
-	let { likes, getError } = await supabase.from('anime').eq('id', id).select('likes').maybeSingle();
-	console.info(likes);
+	let { data: anime, getError } = await supabase.from('anime').select('id','likes').eq('id', id).maybeSingle();
+	console.info(anime);
 	if(getError) res.status(404).json({error: getError});
-	const { updateError } = await supabase.from('anime').update({ likes: ++likes}).eq('id', +id);
+	const { updateError } = await supabase.from('anime').update({ likes: ++anime.likes}).eq('id', +id);
 	if(updateError) res.status(404).json({error: updateError});
-	else res.json({likes: likes});
+	else res.json(anime);
 });
 api.use('/api/', router);
 
