@@ -11,12 +11,12 @@ const api = express();
 
 const router = Router();
 router.get('/', (req, res) => res.send('Status: 200'));
-router.get('/anime/:id/likes', (req, res)=>{
+router.get('/anime/:id/likes', async (req, res)=>{
 	const { likes, error } = await supabase.from('anime').select('likes').eq('id', req.params.id).maybeSingle();
 	if(error) res.status(404).json({error: error});
 	else res.json({likes});
 });
-router.post('/anime/:id/likes', (req, res)=>{
+router.post('/anime/:id/likes', async (req, res)=>{
 	const id = req.params.id;
 	const { likes, getError } = await supabase.from('anime').select('likes').eq('id', id).maybeSingle();
 	if(getError) res.status(404).json({error: getError});
