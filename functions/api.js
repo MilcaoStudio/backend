@@ -24,7 +24,15 @@ router.post('/anime/:id/likes', async (req, res)=>{
 	const { updateError } = await supabase.from('anime').update({ likes: ++likes['likes']}).eq('id', +id);
 	if(updateError) res.status(404).json({error: updateError});
 	else res.json(likes);
+	
 });
+router.get('/anime/:id/nombre', async (req, res)=>{
+	const { data: nombre, error } = await supabase.from('anime').select('nombre').eq('id', req.params.id);
+	console.info(nombre);
+	if(error) res.status(404).json({error: error});
+	else res.json(nombre);
+});
+
 api.use('/api/', router);
 
 exports.handler = serverless(api);
