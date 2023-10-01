@@ -6,26 +6,24 @@ const {
 } = process.env;
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(DATABASE_URL, SUPABASE_KEY);
-console.info('Leaking databaseurl', DATABASE_URL);
-console.info('Leaking supabase key', SUPABASE_KEY);
 const api = express();
 
 const router = express.Router();
 router.get('/', (req, res) => res.send('Status: 200'));
 router.get('/anime/:id/likes', async (req, res)=>{
-	const { data: anime, error } = await supabase.from('anime').select();
-	console.info(anime);
+	const { data: likes, error } = await supabase.from('anime').select('likes').eq('id', req.params.id);
+	console.info(likes);
 	if(error) res.status(404).json({error: error});
-	else res.json(anime);
+	else res.json(likes);
 });
 router.post('/anime/:id/likes', async (req, res)=>{
 	const id = req.params.id;
-	let { data: anime, getError } = await supabase.from('anime').select('id,likes');
-	console.info(anime);
+	let { data: likes, getError } = await supabase.from('anime').select('likes').eq('id',req.params.id).maybeSingle();
+	console.info(likes);
 	if(getError) res.status(404).json({error: getError});
-	const { updateError } = await supabase.from('anime').update({ likes: ++anime.likes}).eq('id', +id);
+	const { updateError } = await supabase.from('anime').update({ likes: ++likes['likes']}).eq('id', +id);
 	if(updateError) res.status(404).json({error: updateError});
-	else res.json(anime);
+	else res.json(likes);
 });
 api.use('/api/', router);
 
